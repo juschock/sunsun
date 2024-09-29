@@ -7,6 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Sun, BookOpen, Globe, Megaphone } from "lucide-react"
 
+// Define types
+type ContentLanguages = 'en' | 'es' | 'fr' | 'de' | 'zh' | 'hi' | 'bn' | 'ta';
+
 // First, define the structure of your content object
 type ContentType = {
   title: string;
@@ -21,8 +24,6 @@ type ContentType = {
     ads: string;
   };
 };
-
-type ContentLanguages = 'en' | 'es' | 'fr' | 'de' | 'zh' | 'hi' | 'bn' | 'ta';
 
 const languages = [
   { code: 'en', name: 'English' },
@@ -143,7 +144,18 @@ const content: Record<ContentLanguages, ContentType> = {
   },
 }
 
-const featuredContent = {
+// Define a type for the featured content items
+type FeaturedContentItem = {
+  title: string;
+  language: string;
+  author?: string;
+  source?: string;
+  publication?: string;
+  brand?: string;
+};
+
+// Update the type of featuredContent
+const featuredContent: Record<string, FeaturedContentItem[]> = {
   fiction: [
     { title: "The Polyglot's Dawn", language: "English", author: "Emma Sunwriter" },
     { title: "Ecos de un Amanecer", language: "Español", author: "Carlos Solaris" },
@@ -166,7 +178,7 @@ const featuredContent = {
     { title: "Voyage culinaire: Une explosion de saveurs ensoleillées", language: "Français", author: "Sophie Saveursoleil" },
     { title: "भाषाई यात्रा: विविधता में एकता की खोज", language: "हिन्दी", author: "रोशनी शर्मा" },
     { title: "ভাষার রঙিন দুনিয়া: এক ব্লগারের অভিজ্ঞতা", language: "বাংলা", author: "আলো মিত্র" },
-    { title: "மொழிகளின் வண்ண உலகம்: ரு பயககிப��பு", language: "தமிழ்", author: "ஒளி குமார்" },
+    { title: "மொழிகளின் வண்ண உலகம்:  பயககிபு", language: "தமிழ்", author: "ஒளி குமார்" },
   ],
   articles: [
     { title: "The Neuroscience of Multilingual Illumination", language: "English", publication: "Brain & Language Glow Journal" },
@@ -186,19 +198,18 @@ const featuredContent = {
   ],
 }
 
-const handleLanguageChange = (value: string) => {
-  if (isContentLanguage(value)) {
-    setCurrentLang(value);
-  }
+const isContentLanguage = (value: string): value is ContentLanguages => {
+  return ['en', 'es', 'fr', 'de', 'zh', 'hi', 'bn', 'ta'].includes(value);
 };
 
-// Add this type guard function
-function isContentLanguage(value: string): value is ContentLanguages {
-  return ['en', 'es', 'fr', 'de', 'zh', 'hi', 'bn', 'ta'].includes(value);
-}
-
 export function SunSunLandingComponent() {
-  const [currentLang, _setCurrentLang] = useState<ContentLanguages>('en')
+  const [currentLang, setCurrentLang] = useState<ContentLanguages>('en');
+
+  const handleLanguageChange = (value: string) => {
+    if (isContentLanguage(value)) {
+      setCurrentLang(value);
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-sky-100 to-white text-gray-800 font-sans">
