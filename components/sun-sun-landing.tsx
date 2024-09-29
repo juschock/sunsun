@@ -5,7 +5,24 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Sun, BookOpen, Newspaper, PenTool, Megaphone, Globe } from "lucide-react"
+import { Sun, BookOpen, Globe, Megaphone } from "lucide-react"
+
+// First, define the structure of your content object
+type ContentType = {
+  title: string;
+  subtitle: string;
+  cta: string;
+  featuredTitle: string;
+  contentTypes: {
+    fiction: string;
+    news: string;
+    blogs: string;
+    articles: string;
+    ads: string;
+  };
+};
+
+type ContentLanguages = 'en' | 'es' | 'fr' | 'de' | 'zh' | 'hi' | 'bn' | 'ta';
 
 const languages = [
   { code: 'en', name: 'English' },
@@ -18,7 +35,8 @@ const languages = [
   { code: 'ta', name: 'தமிழ்' },
 ]
 
-const content = {
+// Define the content object with the correct type
+const content: Record<ContentLanguages, ContentType> = {
   en: {
     title: "Sun Sun",
     subtitle: "Radiant content that illuminates across languages",
@@ -120,7 +138,7 @@ const content = {
       news: "விடியல் செய்திகள்",
       blogs: "சூரிய வலைப்பதிவுகள்",
       articles: "ஒளிரும் கட்டுரைகள்",
-      ads: "பிரகாசமான விளம்பரங்கள்"
+      ads: "பிரகாசமன விளம்பரங்கள்"
     }
   },
 }
@@ -148,7 +166,7 @@ const featuredContent = {
     { title: "Voyage culinaire: Une explosion de saveurs ensoleillées", language: "Français", author: "Sophie Saveursoleil" },
     { title: "भाषाई यात्रा: विविधता में एकता की खोज", language: "हिन्दी", author: "रोशनी शर्मा" },
     { title: "ভাষার রঙিন দুনিয়া: এক ব্লগারের অভিজ্ঞতা", language: "বাংলা", author: "আলো মিত্র" },
-    { title: "மொழிகளின் வண்ண உலகம்: ஒரு பயணக்குறிப்பு", language: "தமிழ்", author: "ஒளி குமார்" },
+    { title: "மொழிகளின் வண்ண உலகம்: ரு பயககிப��பு", language: "தமிழ்", author: "ஒளி குமார்" },
   ],
   articles: [
     { title: "The Neuroscience of Multilingual Illumination", language: "English", publication: "Brain & Language Glow Journal" },
@@ -168,8 +186,19 @@ const featuredContent = {
   ],
 }
 
+const handleLanguageChange = (value: string) => {
+  if (isContentLanguage(value)) {
+    setCurrentLang(value);
+  }
+};
+
+// Add this type guard function
+function isContentLanguage(value: string): value is ContentLanguages {
+  return ['en', 'es', 'fr', 'de', 'zh', 'hi', 'bn', 'ta'].includes(value);
+}
+
 export function SunSunLandingComponent() {
-  const [currentLang, setCurrentLang] = useState('en')
+  const [currentLang, _setCurrentLang] = useState<ContentLanguages>('en')
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-sky-100 to-white text-gray-800 font-sans">
@@ -179,7 +208,7 @@ export function SunSunLandingComponent() {
           <span className="ml-2 text-2xl font-bold text-white">Sun Sun</span>
         </a>
         <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Select value={currentLang} onValueChange={setCurrentLang}>
+          <Select value={currentLang} onValueChange={handleLanguageChange}>
             <SelectTrigger className="w-[180px] bg-white text-indigo-600 border-indigo-300">
               <SelectValue placeholder="Select Language" />
             </SelectTrigger>
